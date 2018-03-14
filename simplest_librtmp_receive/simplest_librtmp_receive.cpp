@@ -6,11 +6,8 @@
 #include "librtmp/rtmp.h"
 #include "librtmp/log.h"
 
+char rtmp_url[] = "rtmp://192.168.3.101:1935/live/test";
 
-
-void CleanupSockets()
-{
-}
 
 int main(int argc, char* argv[])
 {
@@ -42,12 +39,10 @@ int main(int argc, char* argv[])
 	//set connection timeout,default 30s
 	rtmp->Link.timeout=10;	
 	// HKS's live URL
-    char url[] = "rtmp://live.hkstv.hk.lxdns.com/live/hks";
-	if(!RTMP_SetupURL(rtmp, url))
+	if(!RTMP_SetupURL(rtmp, rtmp_url))
 	{
 		RTMP_Log(RTMP_LOGERROR,"SetupURL Err\n");
 		RTMP_Free(rtmp);
-		CleanupSockets();
 		return -1;
 	}
 	if (bLiveStream){
@@ -60,7 +55,6 @@ int main(int argc, char* argv[])
 	if(!RTMP_Connect(rtmp,NULL)){
 		RTMP_Log(RTMP_LOGERROR,"Connect Err\n");
 		RTMP_Free(rtmp);
-		CleanupSockets();
 		return -1;
 	}
 
@@ -68,7 +62,6 @@ int main(int argc, char* argv[])
 		RTMP_Log(RTMP_LOGERROR,"ConnectStream Err\n");
 		RTMP_Close(rtmp);
 		RTMP_Free(rtmp);
-		CleanupSockets();
 		return -1;
 	}
 
@@ -89,7 +82,6 @@ int main(int argc, char* argv[])
 	if(rtmp){
 		RTMP_Close(rtmp);
 		RTMP_Free(rtmp);
-		CleanupSockets();
 		rtmp=NULL;
 	}	
 	return 0;

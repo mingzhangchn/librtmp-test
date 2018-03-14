@@ -10,9 +10,10 @@
 
 #define HTON16(x)  ((x>>8&0xff)|(x<<8&0xff00))
 #define HTON24(x)  ((x>>16&0xff)|(x<<16&0xff0000)|(x&0xff00))
-#define HTON32(x)  ((x>>24&0xff)|(x>>8&0xff00)|\
-	(x<<8&0xff0000)|(x<<24&0xff000000))
+#define HTON32(x)  ((x>>24&0xff)|(x>>8&0xff00)|(x<<8&0xff0000)|(x<<24&0xff000000))
 #define HTONTIME(x) ((x>>16&0xff)|(x<<16&0xff0000)|(x&0xff00)|(x&0xff000000))
+
+char rtmp_url[] = "rtmp://192.168.3.101:1935/live/test";
 
 /*read 1 byte*/
 int ReadU8(uint32_t *u8,FILE*fp){
@@ -112,8 +113,8 @@ int publish_using_packet(){
 	RTMP_Init(rtmp);
 	//set connection timeout,default 30s
 	rtmp->Link.timeout=5;	
-    char url[] = "rtmp://localhost/publishlive/livestream";
-	if(!RTMP_SetupURL(rtmp, url))
+    
+	if(!RTMP_SetupURL(rtmp, rtmp_url))
 	{
 		RTMP_Log(RTMP_LOGERROR,"SetupURL Err\n");
 		RTMP_Free(rtmp);
@@ -280,8 +281,7 @@ int publish_using_write(){
 	RTMP_Init(rtmp);
 	//set connection timeout,default 30s
 	rtmp->Link.timeout=5;			
-    char url[] = "rtmp://localhost/publishlive/livestream";
-	if(!RTMP_SetupURL(rtmp, url))
+	if(!RTMP_SetupURL(rtmp, rtmp_url))
 	{
 		RTMP_Log(RTMP_LOGERROR,"SetupURL Err\n");
 		RTMP_Free(rtmp);

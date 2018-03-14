@@ -67,35 +67,6 @@ enum
 	 VIDEO_CODECID_H264 = 7,  
 };  
 
-/**
- * 初始化winsock
- *					
- * @成功则返回1 , 失败则返回相应错误代码
- */ 
-int InitSockets()    
-{    
-	#ifdef WIN32     
-		WORD version;    
-		WSADATA wsaData;    
-		version = MAKEWORD(1, 1);    
-		return (WSAStartup(version, &wsaData) == 0);    
-	#else     
-		return TRUE;    
-	#endif     
-}
-
-/**
- * 释放winsock
- *					
- * @成功则返回0 , 失败则返回相应错误代码
- */ 
-inline void CleanupSockets()    
-{    
-	#ifdef WIN32     
-		WSACleanup();    
-	#endif     
-}    
-
 //网络字节序转换
 char * put_byte( char *output, uint8_t nVal )    
 {    
@@ -180,7 +151,6 @@ int RTMP264_Connect(const char* url)
 	m_nFileBufSize=BUFFER_SIZE;
 	m_pFileBuf=(unsigned char*)malloc(BUFFER_SIZE);
 	m_pFileBuf_tmp=(unsigned char*)malloc(BUFFER_SIZE);
-	InitSockets();  
 
 	m_pRtmp = RTMP_Alloc();
 	RTMP_Init(m_pRtmp);
@@ -222,7 +192,7 @@ void RTMP264_Close()
 		RTMP_Free(m_pRtmp);  
 		m_pRtmp = NULL;  
 	}  
-	CleanupSockets();   
+   
 	if (m_pFileBuf != NULL)
 	{  
 		free(m_pFileBuf);
